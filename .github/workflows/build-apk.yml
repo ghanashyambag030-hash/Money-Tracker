@@ -1,0 +1,66 @@
+name: Build Money Tracker APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Prepare Money Tracker Android project
+        run: |
+          set -e
+
+          BUILD_DIR="$RUNNER_TEMP/money-tracker"
+
+          rm -rf "$BUILD_DIR"
+
+          mkdir -p "$BUILD_DIR/www"
+          mkdir -p "$BUILD_DIR/resources"
+
+          cp index.html "$BUILD_DIR/www/index.html"
+          cp app-icon.png "$BUILD_DIR/resources/icon.png"
+
+          cd "$BUILD_DIR"
+
+          npm init -y
+
+          npm install \
+            @capacitor/core@7 \
+            @capacitor/cli@7 \
+            @capacitor/android@7 \
+            @capacitor/assets@latest
+
+          npx cap init "Money Tracker" "com.moneytracker.app" --web-dir=www
+
+          npx cap add android
+
+          npx capacitor-assets generate --android
+
+          cd android
+
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Money-Tracker-APK
+          path: ${{ runner.temp }}/money-tracker/android/app/build/outputs/apk/debug/app-debug.apk
