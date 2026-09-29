@@ -1247,6 +1247,32 @@ function drawDailyChart() {
         `;
     }).join("");
 }
+        /* ---------- CHART BUTTON ---------- */
+
+document.getElementById("chartBtn")
+    .addEventListener("click", function() {
+
+        document.getElementById("chartModal")
+            .classList.remove("hidden");
+
+        drawDailyChart();
+    });
+
+
+document.getElementById("closeChartBtn")
+    .addEventListener("click", function() {
+
+        document.getElementById("chartModal")
+            .classList.add("hidden");
+    });
+
+
+document.getElementById("dailyChartBtn")
+    .addEventListener("click", function() {
+
+        drawDailyChart();
+    });
+        
         
 /* ---------- START ---------- */
 
