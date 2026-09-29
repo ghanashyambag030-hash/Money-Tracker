@@ -1276,11 +1276,6 @@ document.getElementById("dailyChartBtn")
 
         setChartActive("dailyChartBtn");
         drawDailyChart();
-    });document.getElementById("dailyChartBtn")
-    .addEventListener("click", function() {
-
-        setChartActive("dailyChartBtn");
-        drawDailyChart();
     });
 
         /* ---------- MONTHLY / YEARLY CHART DATA ---------- */
@@ -1397,10 +1392,6 @@ function getPeriodChartData(type) {
     .addEventListener("click", function() {
         setChartActive("monthlyChartBtn");
         drawPeriodChart("monthly");
-    });document.getElementById("monthlyChartBtn")
-    .addEventListener("click", function() {
-        setChartActive("monthlyChartBtn");
-        drawPeriodChart("monthly");
     });
         
 document.getElementById("yearlyChartBtn")
@@ -1420,29 +1411,6 @@ document.getElementById("yearlyChartBtn")
         .style.background = "#1976d2";
         }
         
-        <!-- ---------- CATEGORY MANAGEMENT ---------- -->
-<div id="categoryModal" class="hidden" style="
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.55);
-    z-index:9999;
-    padding:20px;
-    overflow:auto;
-">
-    <div style="
-        max-width:420px;
-        margin:40px auto;
-        background:white;
-        border-radius:15px;
-        padding:20px;
-    ">
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        ">
-            <h2 style="margin:0;">🏷️ Category Management</h2>
-
             <button id="closeCategoryBtn" style="
                 width:auto;
                 padding:6px 12px;
