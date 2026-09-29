@@ -214,6 +214,106 @@ button:active {
     📊 চার্ট
     </button>
 </header>
+    <!-- ---------- CHART MODAL ---------- -->
+
+<div
+    id="chartModal"
+    class="hidden"
+    style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.55);
+        z-index:100;
+        padding:20px;
+        overflow:auto;
+    "
+>
+
+    <div
+        style="
+            background:white;
+            max-width:600px;
+            margin:30px auto;
+            border-radius:16px;
+            padding:18px;
+        "
+    >
+
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            "
+        >
+
+            <h2 style="margin:0;">
+                খরচের চার্ট
+            </h2>
+
+            <button
+                id="closeChartBtn"
+                style="
+                    width:auto;
+                    margin:0;
+                    background:#e74c3c;
+                    padding:8px 14px;
+                "
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            style="
+                display:flex;
+                gap:8px;
+                margin-top:15px;
+            "
+        >
+
+            <button
+                id="dailyChartBtn"
+                style="margin:0;"
+            >
+                দৈনিক
+            </button>
+
+            <button
+                id="monthlyChartBtn"
+                style="margin:0;background:#777;"
+            >
+                মাসিক
+            </button>
+
+            <button
+                id="yearlyChartBtn"
+                style="margin:0;background:#777;"
+            >
+                বার্ষিক
+            </button>
+
+        </div>
+
+        <div
+            id="chartArea"
+            style="
+                margin-top:20px;
+                text-align:center;
+            "
+        >
+        </div>
+
+        <div
+            id="chartLegend"
+            style="margin-top:20px;"
+        >
+        </div>
+
+    </div>
+
+</div>
 
 <div class="container">
 
