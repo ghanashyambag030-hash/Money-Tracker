@@ -213,6 +213,11 @@ button:active {
 >
     📊 চার্ট
     </button>
+    <button id="categoryBtn" style="width:auto;margin-top:10px;padding:8px 18px;">
+    🏷️ Category
+</button><button id="categoryBtn" style="width:auto;margin-top:10px;padding:8px 18px;">
+    🏷️ Category
+</button>
 </header>
     <!-- ---------- CHART MODAL ---------- -->
 
@@ -808,6 +813,7 @@ function saveExpense() {
     clearExpenseForm();
     renderExpenses();
     updateSummary();
+    renderCategories();
 }
 
 
@@ -1416,6 +1422,259 @@ document.getElementById("yearlyChartBtn")
         .style.background = "#1976d2";
         }
         
+        <!-- ---------- CATEGORY MANAGEMENT ---------- -->
+<div id="categoryModal" class="hidden" style="
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    z-index:9999;
+    padding:20px;
+    overflow:auto;
+">
+    <div style="
+        max-width:420px;
+        margin:40px auto;
+        background:white;
+        border-radius:15px;
+        padding:20px;
+    ">
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <h2 style="margin:0;">🏷️ Category Management</h2>
+
+            <button id="closeCategoryBtn" style="
+                width:auto;
+                padding:6px 12px;
+                background:#e53935;
+            ">✕</button>
+        </div>
+
+        <div style="margin-top:20px;">
+            <input
+                id="newCategoryInput"
+                type="text"
+                placeholder="নতুন Category লিখুন"
+                style="width:100%;box-sizing:border-box;"
+            >
+
+            <button id="addCategoryBtn" style="
+                margin-top:10px;
+                background:#1976d2;
+            ">
+                ➕ Add Category
+            </button>
+        </div>
+
+        <div style="margin-top:20px;">
+            <h3>বর্তমান Categories</h3>
+            <div id="categoryList"></div>
+        </div>
+    </div>
+</div>
+        /* ---------- CATEGORY MANAGEMENT ---------- */
+
+function renderCategories() {
+    const list = document.getElementById("categoryList");
+
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    categories.forEach(function(category, index) {
+        const row = document.createElement("div");
+
+        row.style.display = "flex";
+        row.style.justifyContent = "space-between";
+        row.style.alignItems = "center";
+        row.style.padding = "10px";
+        row.style.marginBottom = "8px";
+        row.style.background = "#f1f1f1";
+        row.style.borderRadius = "8px";
+
+        row.innerHTML = `
+            <span>${escapeHtml(category)}</span>
+            <button
+                onclick="deleteCategory(${index})"
+                style="
+                    width:auto;
+                    padding:5px 10px;
+                    background:#e53935;
+                "
+            >
+                🗑️
+            </button>
+        `;
+
+        list.appendChild(row);
+    });
+}
+
+function addCategory() {
+    const input = document.getElementById("newCategoryInput");
+    const name = input.value.trim();
+
+    if (!name) {
+        alert("Category-এর নাম লিখুন।");
+        return;
+    }
+
+    if (categories.includes(name)) {
+        alert("এই Category আগে থেকেই আছে।");
+        return;
+    }
+
+    categories.push(name);
+
+    localStorage.setItem(
+        "moneyTrackerCategories",
+        JSON.stringify(categories)
+    );
+
+    input.value = "";
+
+    populateCategorySelect();
+    renderCategories();
+}
+
+function deleteCategory(index) {
+    const category = categories[index];
+
+    if (!confirm(`"${category}" Category delete করবেন?`)) {
+        return;
+    }
+
+    categories.splice(index, 1);
+
+    localStorage.setItem(
+        "moneyTrackerCategories",
+        JSON.stringify(categories)
+    );
+
+    populateCategorySelect();
+    renderCategories();
+}
+
+document.getElementById("categoryBtn").addEventListener("click", function() {
+    document.getElementById("categoryModal").classList.remove("hidden");
+    renderCategories();
+});
+
+document.getElementById("closeCategoryBtn").addEventListener("click", function() {
+    document.getElementById("categoryModal").classList.add("hidden");
+});
+
+document.getElementById("addCategoryBtn").addEventListener("click", function() {
+    addCategory();
+});
+
+document.getElementById("newCategoryInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        addCategory();
+    }
+});/* ---------- CATEGORY MANAGEMENT ---------- */
+
+function renderCategories() {
+    const list = document.getElementById("categoryList");
+
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    categories.forEach(function(category, index) {
+        const row = document.createElement("div");
+
+        row.style.display = "flex";
+        row.style.justifyContent = "space-between";
+        row.style.alignItems = "center";
+        row.style.padding = "10px";
+        row.style.marginBottom = "8px";
+        row.style.background = "#f1f1f1";
+        row.style.borderRadius = "8px";
+
+        row.innerHTML = `
+            <span>${escapeHtml(category)}</span>
+            <button
+                onclick="deleteCategory(${index})"
+                style="
+                    width:auto;
+                    padding:5px 10px;
+                    background:#e53935;
+                "
+            >
+                🗑️
+            </button>
+        `;
+
+        list.appendChild(row);
+    });
+}
+
+function addCategory() {
+    const input = document.getElementById("newCategoryInput");
+    const name = input.value.trim();
+
+    if (!name) {
+        alert("Category-এর নাম লিখুন।");
+        return;
+    }
+
+    if (categories.includes(name)) {
+        alert("এই Category আগে থেকেই আছে।");
+        return;
+    }
+
+    categories.push(name);
+
+    localStorage.setItem(
+        "moneyTrackerCategories",
+        JSON.stringify(categories)
+    );
+
+    input.value = "";
+
+    populateCategorySelect();
+    renderCategories();
+}
+
+function deleteCategory(index) {
+    const category = categories[index];
+
+    if (!confirm(`"${category}" Category delete করবেন?`)) {
+        return;
+    }
+
+    categories.splice(index, 1);
+
+    localStorage.setItem(
+        "moneyTrackerCategories",
+        JSON.stringify(categories)
+    );
+
+    populateCategorySelect();
+    renderCategories();
+}
+
+document.getElementById("categoryBtn").addEventListener("click", function() {
+    document.getElementById("categoryModal").classList.remove("hidden");
+    renderCategories();
+});
+
+document.getElementById("closeCategoryBtn").addEventListener("click", function() {
+    document.getElementById("categoryModal").classList.add("hidden");
+});
+
+document.getElementById("addCategoryBtn").addEventListener("click", function() {
+    addCategory();
+});
+
+document.getElementById("newCategoryInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        addCategory();
+    }
+});
         
 /* ---------- START ---------- */
 
