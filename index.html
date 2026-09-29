@@ -1270,6 +1270,12 @@ document.getElementById("closeChartBtn")
 document.getElementById("dailyChartBtn")
     .addEventListener("click", function() {
 
+        setChartActive("dailyChartBtn");
+        drawDailyChart();
+    });document.getElementById("dailyChartBtn")
+    .addEventListener("click", function() {
+
+        setChartActive("dailyChartBtn");
         drawDailyChart();
     });
 
@@ -1385,13 +1391,19 @@ function getPeriodChartData(type) {
 
         document.getElementById("monthlyChartBtn")
     .addEventListener("click", function() {
+        setChartActive("monthlyChartBtn");
+        drawPeriodChart("monthly");
+    });document.getElementById("monthlyChartBtn")
+    .addEventListener("click", function() {
+        setChartActive("monthlyChartBtn");
         drawPeriodChart("monthly");
     });
-
+        
 document.getElementById("yearlyChartBtn")
     .addEventListener("click", function() {
+        setChartActive("yearlyChartBtn");
         drawPeriodChart("yearly");
-});
+    });
 
         function setChartActive(buttonId) {
     document.querySelectorAll(
