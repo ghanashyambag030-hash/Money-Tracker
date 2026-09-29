@@ -1272,6 +1272,44 @@ document.getElementById("dailyChartBtn")
 
         drawDailyChart();
     });
+
+        /* ---------- MONTHLY / YEARLY CHART DATA ---------- */
+
+function getPeriodChartData(type) {
+
+    const totals = {};
+
+    expenses.forEach(expense => {
+
+        let key = "";
+
+        if (type === "monthly") {
+            key = expense.date.substring(0, 7);
+        }
+
+        if (type === "yearly") {
+            key = expense.date.substring(0, 4);
+        }
+
+        if (!key) return;
+
+        const category = expense.category || "অন্যান্য";
+        const amount = Number(expense.amount) || 0;
+
+        if (!totals[category]) {
+            totals[category] = 0;
+        }
+
+        totals[category] += amount;
+    });
+
+    return Object.entries(totals)
+        .map(([category, amount]) => ({
+            category,
+            amount
+        }))
+        .sort((a, b) => b.amount - a.amount);
+}
         
         
 /* ---------- START ---------- */
