@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Money Tracker</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, "Noto Sans Bengali", sans-serif;
+    background:#f4f6f8;
+    color:#222;
+    min-height:100vh;
+}
+
+.header{
+    height:58px;
+    background:#ffffff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 15px;
+    border-bottom:1px solid #ddd;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.header h1{
+    font-size:20px;
+    font-weight:700;
+}
+
+.chart-btn{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:10px;
+    background:#f0f2f5;
+    font-size:21px;
+    cursor:pointer;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.summary-box{
+    background:#fff;
+    border-radius:12px;
+    padding:14px 10px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.summary-box .label{
+    font-size:13px;
+    color:#777;
+    margin-bottom:6px;
+}
+
+.summary-box .value{
+    font-size:19px;
+    font-weight:bold;
+}
+
+.expense-value{
+    color:#e53935;
+}
+
+.income-value{
+    color:#2e7d32;
+}
+
+.balance-value{
+    color:#1565c0;
+}
+
+.card{
+    background:#fff;
+    border-radius:14px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.card-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    font-size:13px;
+    color:#555;
+    font-weight:600;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid #d5d9dd;
+    border-radius:9px;
+    padding:10px;
+    font-size:15px;
+    outline:none;
+    background:#fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#1976d2;
+}
+
+textarea{
+    resize:vertical;
+    min-height:70px;
+}
+
+.btn-row{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+button{
+    border:none;
+    border-radius:9px;
+    padding:10px 14px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.primary-btn{
+    background:#1976d2;
+    color:white;
+    flex:1;
+}
+
+.secondary-btn{
+    background:#eceff1;
+    color:#333;
+}
+
+.income-btn{
+    background:#2e7d32;
+    color:white;
+    flex:1;
+}
+
+.cancel-btn{
+    display:none;
+}
+
+.list-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.search-box{
+    margin-bottom:10px;
+}
+
+.record{
+    background:#fafafa;
+    border:1px solid #e1e4e7;
+    border-radius:11px;
+    padding:12px;
+    margin-bottom:9px;
+}
+
+.record-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.record-item{
+    font-weight:bold;
+    font-size:15px;
+}
+
+.record-amount{
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.record-details{
+    margin-top:7px;
+    font-size:13px;
+    color:#666;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    align-items:center;
+}
+
+.category-badge{
+    background:#e8f5e9;
+    color:#2e7d32;
+    border-radius:20px;
+    padding:4px 8px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.record-actions{
+    display:flex;
+    gap:7px;
+    margin-top:9px;
+}
+
+.edit-btn{
+    background:#fff3e0;
+    color:#e65100;
+}
+
+.delete-btn{
+    background:#ffebee;
+    color:#c62828;
+}
+
+.empty{
+    text-align:center;
+    color:#888;
+    padding:20px 10px;
+    font-size:14px;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+}
+
+.tab{
+    flex:1;
+    background:#eceff1;
+    color:#444;
+}
+
+.tab.active{
+    background:#1976d2;
+    color:#fff;
+}
+
+.income-section{
+    display:none;
+}
+
+@media(max-width:600px){
+
+    .summary{
+        gap:7px;
+    }
+
+    .summary-box{
+        padding:11px 5px;
+    }
+
+    .summary-box .label{
+        font-size:11px;
+    }
+
+    .summary-box .value{
+        font-size:16px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .header h1{
+        font-size:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>Money Tracker</h1>
+
+    <button class="chart-btn" id="openChartBtn" title="Charts">
+        📊
+    </button>
+</header>
+
+<main class="container">
+
+    <!-- SUMMARY -->
+    <section class="summary">
+
+        <div class="summary-box">
+            <div class="label">আজকের খরচ</div>
+            <div class="value expense-value" id="todayExpense">
+                ₹0.00
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <div class="label">এই মাসের আয়</div>
+            <div class="value income-value" id="monthIncome">
+                ₹0.00
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <div class="label">Balance</div>
+            <div class="value balance-value" id="balance">
+                ₹0.00
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- TABS -->
+    <section class="card">
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                id="expenseTab">
+                খরচ
+            </button>
+
+            <button
+                class="tab"
+                id="incomeTab">
+                আয়
+            </button>
+
+        </div>
+
+
+        <!-- EXPENSE FORM -->
+        <div id="expenseSection">
+
+            <div class="card-title">
+                খরচ যোগ করুন
+            </div>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label>তারিখ</label>
+
+                    <input
+                        type="date"
+                        id="expenseDate">
+                </div>
+
+
+                <div class="field">
+                    <label>Category</label>
+
+                    <select id="expenseCategory">
+                        <option value="">Category নির্বাচন করুন</option>
+                    </select>
+                </div>
+
+
+                <div class="field full">
+                    <label>খরচের নাম</label>
+
+                    <input
+                        type="text"
+                        id="expenseItem"
+                        placeholder="যেমন: মাছ, বাজার">
+                </div>
+
+
+                <div class="field">
+                    <label>টাকার পরিমাণ</label>
+
+                    <input
+                        type="number"
+                        id="expenseAmount"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01">
+                </div>
+
+
+                <div class="field">
+                    <label>নোট</label>
+
+                    <input
+                        type="text"
+                        id="expenseNote"
+                        placeholder="ঐচ্ছিক">
+                </div>
+
+            </div>
+
+
+            <div class="btn-row">
+
+                <button
+                    class="primary-btn"
+                    id="saveExpenseBtn">
+                    খরচ যোগ করুন
+                </button>
+
+                <button
+                    class="secondary-btn cancel-btn"
+                    id="cancelExpenseBtn">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- INCOME FORM -->
+        <div
+            id="incomeSection"
+            class="income-section">
+
+            <div class="card-title">
+                আয় যোগ করুন
+            </div>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label>তারিখ</label>
+
+                    <input
+                        type="date"
+                        id="incomeDate">
+                </div>
+
+
+                <div class="field full">
+                    <label>আয়ের নাম</label>
+
+                    <input
+                        type="text"
+                        id="incomeItem"
+                        placeholder="যেমন: Salary">
+                </div>
+
+
+                <div class="field">
+                    <label>টাকার পরিমাণ</label>
+
+                    <input
+                        type="number"
+                        id="incomeAmount"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01">
+                </div>
+
+
+                <div class="field">
+                    <label>নোট</label>
+
+                    <input
+                        type="text"
+                        id="incomeNote"
+                        placeholder="ঐচ্ছিক">
+                </div>
+
+            </div>
+
+
+            <div class="btn-row">
+
+                <button
+                    class="income-btn"
+                    id="saveIncomeBtn">
+                    আয় যোগ করুন
+                </button>
+
+                <button
+                    class="secondary-btn cancel-btn"
+                    id="cancelIncomeBtn">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXPENSE LIST -->
+    <section class="card">
+
+        <div class="list-header">
+            <div class="card-title">
+                খরচের তালিকা
+            </div>
+        </div>
+
+        <input
+            type="text"
+            class="search-box"
+            id="expenseSearch"
+            placeholder="খরচ খুঁজুন...">
+
+        <div id="expenseList"></div>
+
+    </section>
+
+
+    <!-- INCOME LIST -->
+    <section class="card">
+
+        <div class="list-header">
+            <div class="card-title">
+                আয়ের তালিকা
+            </div>
+        </div>
+
+        <input
+            type="text"
+            class="search-box"
+            id="incomeSearch"
+            placeholder="আয় খুঁজুন...">
+
+        <div id="incomeList"></div>
+
+    </section>
+
+</main>
+
+
+<!-- CHART MODAL -->
+
+<div
+    id="chartModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:1000;
+        padding:15px;
+        overflow:auto;
+    ">
+
+    <div
+        style="
+            max-width:600px;
+            margin:40px auto;
+            background:white;
+            border-radius:15px;
+            padding:18px;
+        ">
+
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:15px;
+            ">
+
+            <h2 style="font-size:18px;">
+                খরচের Chart
+            </h2>
+
+            <button
+                id="closeChartBtn"
+                class="secondary-btn">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                id="dailyChartTab">
+                Daily
+            </button>
+
+            <button
+                class="tab"
+                id="monthlyChartTab">
+                Monthly
+            </button>
+
+            <button
+                class="tab"
+                id="yearlyChartTab">
+                Yearly
+            </button>
+
+        </div>
+
+
+        <div
+            id="chartArea"
+            style="
+                min-height:300px;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+            ">
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+/* =========================================
+   MONEY TRACKER
+   ========================================= */
+
+
+/* ---------- STORAGE ---------- */
+
+const EXPENSE_KEY = "moneyTrackerExpenses";
+const INCOME_KEY = "moneyTrackerIncomes";
+const CATEGORY_KEY = "moneyTrackerCategories";
+
+
+/* ---------- DEFAULT CATEGORIES ---------- */
+
+const defaultCategories = [
+    "বাজার",
+    "সবজি",
+    "মাছ",
+    "মাংস",
+    "চাল / ডাল",
+    "যাতায়াত",
+    "বিদ্যুৎ",
+    "মোবাইল",
+    "বাড়ি",
+    "অন্যান্য"
+];
+
+
+/* ---------- DATA ---------- */
+
+let expenses =
+    JSON.parse(localStorage.getItem(EXPENSE_KEY) || "[]");
+
+let incomes =
+    JSON.parse(localStorage.getItem(INCOME_KEY) || "[]");
+
+let categories =
+    JSON.parse(
+        localStorage.getItem(CATEGORY_KEY)
+        || JSON.stringify(defaultCategories)
+    );
+
+
+/* ---------- EDIT STATE ---------- */
+
+let editingExpenseId = null;
+let editingIncomeId = null;
+
+
+/* ---------- HELPERS ---------- */
+
+function saveData(){
+
+    localStorage.setItem(
+        EXPENSE_KEY,
+        JSON.stringify(expenses)
+    );
+
+    localStorage.setItem(
+        INCOME_KEY,
+        JSON.stringify(incomes)
+    );
+
+    localStorage.setItem(
+        CATEGORY_KEY,
+        JSON.stringify(categories)
+    );
+}
+
+
+function money(value){
+
+    return "₹" + Number(value || 0)
+        .toLocaleString("en-IN", {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        });
+}
+
+
+function todayString(){
+
+    const d = new Date();
+
+    const year = d.getFullYear();
+
+    const month = String(
+        d.getMonth() + 1
+    ).padStart(2,"0");
+
+    const day = String(
+        d.getDate()
+    ).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function monthString(){
+
+    return todayString().slice(0,7);
+}
+
+
+function yearString(){
+
+    return todayString().slice(0,4);
+}
+
+
+/* ---------- INITIAL DATE ---------- */
+
+document.getElementById("expenseDate").value =
+    todayString();
+
+document.getElementById("incomeDate").value =
+    todayString();
+
+
+/* ---------- CATEGORY SELECT ---------- */
+
+function populateCategories(){
+
+    const select =
+        document.getElementById("expenseCategory");
+
+    select.innerHTML =
+        '<option value="">Category নির্বাচন করুন</option>';
+
+    categories.forEach(category => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = category;
+        option.textContent = category;
+
+        select.appendChild(option);
+
+    });
+}
+
+
+/* ---------- SUMMARY ---------- */
+
+function updateSummary(){
+
+    const today =
+        todayString();
+
+    const month =
+        monthString();
+
+    const todayExpense =
+        expenses
+        .filter(item => item.date === today)
+        .reduce(
+            (sum,item) =>
+                sum + Number(item.amount || 0),
+            0
+        );
+
+
+    const monthIncome =
+        incomes
+        .filter(item =>
+            String(item.date).startsWith(month)
+        )
+        .reduce(
+            (sum,item) =>
+                sum + Number(item.amount || 0),
+            0
+        );
+
+
+    const totalExpense =
+        expenses.reduce(
+            (sum,item) =>
+                sum + Number(item.amount || 0),
+            0
+        );
+
+
+    const totalIncome =
+        incomes.reduce(
+            (sum,item) =>
+                sum + Number(item.amount || 0),
+            0
+        );
+
+
+    const balance =
+        totalIncome - totalExpense;
+
+
+    document.getElementById(
+        "todayExpense"
+    ).textContent = money(todayExpense);
+
+
+    document.getElementById(
+        "monthIncome"
+    ).textContent = money(monthIncome);
+
+
+    document.getElementById(
+        "balance"
+    ).textContent = money(balance);
+}
+
+
+/* ---------- RENDER EXPENSES ---------- */
+
+function renderExpenses(){
+
+    const list =
+        document.getElementById("expenseList");
+
+    const search =
+        document.getElementById("expenseSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    let filtered =
+        expenses.filter(item => {
+
+            const text =
+                `${item.item || ""} ${item.category || ""} ${item.note || ""}`
+                .toLowerCase();
+
+            return text.includes(search);
+
+        });
+
+
+    filtered.sort(
+        (a,b) =>
+            new Date(b.date) -
+            new Date(a.date)
+    );
+
+
+    if(filtered.length === 0){
+
+        list.innerHTML =
+            '<div class="empty">কোনো খরচ পাওয়া যায়নি</div>';
+
+        return;
+    }
+
+
+    list.innerHTML =
+        filtered.map(item => `
+
+            <div class="record">
+
+                <div class="record-top">
+
+                    <div class="record-item">
+                        ${escapeHtml(item.item || "খরচ")}
+                    </div>
+
+                    <div
+                        class="record-amount"
+                        style="color:#e53935;">
+                        ${money(item.amount)}
+                    </div>
+
+                </div>
+
+
+                <div class="record-details">
+
+                    <span>
+                        ${escapeHtml(item.date || "")}
+                    </span>
+
+                    ${
+                        item.category
+                        ?
+                        `<span class="category-badge">
+                            ${escapeHtml(item.category)}
+                        </span>`
+                        :
+                        ""
+                    }
+
+                    ${
+                        item.note
+                        ?
+                        `<span>
+                            ${escapeHtml(item.note)}
+                        </span>`
+                        :
+                        ""
+                    }
+
+                </div>
+
+
+                <div class="record-actions">
+
+                    <button
+                        class="edit-btn"
+                        onclick="editExpense('${item.id}')">
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteExpense('${item.id}')">
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* ---------- RENDER INCOME ---------- */
+
+function renderIncomes(){
+
+    const list =
+        document.getElementById("incomeList");
+
+    const search =
+        document.getElementById("incomeSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    let filtered =
+        incomes.filter(item => {
+
+            const text =
+                `${item.item || ""} ${item.note || ""}`
+                .toLowerCase();
+
+            return text.includes(search);
+
+        });
+
+
+    filtered.sort(
+        (a,b) =>
+            new Date(b.date) -
+            new Date(a.date)
+    );
+
+
+    if(filtered.length === 0){
+
+        list.innerHTML =
+            '<div class="empty">কোনো আয় পাওয়া যায়নি</div>';
+
+        return;
+    }
+
+
+    list.innerHTML =
+        filtered.map(item => `
+
+            <div class="record">
+
+                <div class="record-top">
+
+                    <div class="record-item">
+                        ${escapeHtml(item.item || "আয়")}
+                    </div>
+
+                    <div
+                        class="record-amount"
+                        style="color:#2e7d32;">
+                        ${money(item.amount)}
+                    </div>
+
+                </div>
+
+
+                <div class="record-details">
+
+                    <span>
+                        ${escapeHtml(item.date || "")}
+                    </span>
+
+                    ${
+                        item.note
+                        ?
+                        `<span>
+                            ${escapeHtml(item.note)}
+                        </span>`
+                        :
+                        ""
+                    }
+
+                </div>
+
+
+                <div class="record-actions">
+
+                    <button
+                        class="edit-btn"
+                        onclick="editIncome('${item.id}')">
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteIncome('${item.id}')">
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* ---------- HTML SAFETY ---------- */
+
+function escapeHtml(value
