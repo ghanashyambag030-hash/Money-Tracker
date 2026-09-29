@@ -1392,6 +1392,17 @@ document.getElementById("yearlyChartBtn")
     .addEventListener("click", function() {
         drawPeriodChart("yearly");
 });
+
+        function setChartActive(buttonId) {
+    document.querySelectorAll(
+        "#dailyChartBtn, #monthlyChartBtn, #yearlyChartBtn"
+    ).forEach(button => {
+        button.style.background = "#777";
+    });
+
+    document.getElementById(buttonId)
+        .style.background = "#1976d2";
+        }
         
         
 /* ---------- START ---------- */
